@@ -7,7 +7,20 @@ t = 0
 ot = 1
 ol = 0
 
-locales = { "russia", "iran", "the us", "canada", "israel", "europe" }
+locales = { "russia",
+"iran",
+"canada",
+"israel",
+"europe",
+"the middle east" }
+
+lp = {true,
+false,
+true,
+true,
+true,
+false
+}
 
 leaders = { "own trump", "prime minister", "leader", "president", "guy", "religious leader" }
 
@@ -20,6 +33,15 @@ actions = { "made a major announcement",
 "declared war"
 }
 
+ap = { true,
+false,
+true,
+true,
+true,
+true,
+false
+}
+
 responses = { "announce\nyour support",
 "claim\nvictory",
 "condemn them",
@@ -29,6 +51,15 @@ responses = { "announce\nyour support",
 "praise them"
 }
 
+rpts = { true,
+true,
+false,
+false,
+false,
+false,
+true
+}
+
 putins = { "this would be\ngood\nfor russia",
 "yes, keep\nyour\ncitizens confused",
 "i would not\ndo that\nif i were you",
@@ -36,7 +67,7 @@ putins = { "this would be\ngood\nfor russia",
 }
 
 bannons = { "this will\nprotect the\nwhite race",
-"this would be\na triumph\nof reason over emotion",
+"this would\nbe a triumph\nof reason over emotion",
 "this is what\nsoros\nwants you to do",
 "you are too\nsmart to do \nthis"
 }
@@ -45,11 +76,43 @@ approval = flr(rnd(101))
 effectiveness = flr(rnd(101))
 profit = flr(rnd(101))
 
+function getadvice(lid, aid)
+end
+
+function getscore(lid, aid, rid, pri)
+	locationpos = lp[lid]
+	actionpos = ap[aid]
+	responsepos = rpts[rid]
+	if (locationpos and actionpos) then
+		if (responsepos) then
+			return 6-pri
+		end
+		return 6
+	end
+	if (locationpos and not(actionpos)) then
+		if (responsepos) then
+			return 3
+		end
+		return 1
+	end
+	if (not(locationpos) and actionpos) then
+		if (responsepos) then
+			return 2*pri
+		end
+		return 6-pri
+	end
+	if (responsepos) then
+		return 1
+	end
+	return 5
+end 
+
 function _draw()
  cls()
  if (ot != t) then
  	ot = t
- 	locale = locales[flr(rnd(#locales)) + 2]
+ 	lid = flr(rnd(#locales)) + 1
+ 	locale = locales[lid + flr(rnd(2))]
  	leader = leaders[flr(rnd(#leaders)) + 1]
  	aid = flr(rnd(#actions)) + 1
  	action = actions[aid]
@@ -102,10 +165,11 @@ function _draw()
 	if (btnp(4)) then
 		ol = selected + 1
 	end
-	if (btnp(5)) then
-		approval += flr(rnd(25)) - 12
-		effectiveness += flr(rnd(25)) - 12
-		profit += flr(rnd(25)) - 12
+	if (ol == 0 and btnp(5)) then
+		x = getscore(lid, aid, rid, priority)
+		approval += flr(rnd(x))
+		effectiveness += flr(rnd(x))
+		profit += flr(rnd(x))
 		if (approval < 0) then
 			approval = 0
 		end
