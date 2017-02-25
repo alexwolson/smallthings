@@ -7,7 +7,39 @@ t = 0
 ot = 1
 ol = 0
 
-locales = { "iran", "the us", "canada", "israel", "europe" }
+locales = { "russia", "iran", "the us", "canada", "israel", "europe" }
+
+leaders = { "own trump", "prime minister", "leader", "president", "guy", "religious leader" }
+
+actions = { "made a major announcement",
+"threatened major action",
+"resigned",
+"done some kind of thing",
+"won an election",
+"called you on the phone",
+"declared war"
+}
+
+responses = { "announce\nyour support",
+"claim\nvictory",
+"condemn them",
+"declare war",
+"fire nuclear\nweapons",
+"ban their\ncitizens",
+"praise them"
+}
+
+putins = { "this would be\ngood\nfor russia",
+"yes, keep\nyour\ncitizens confused",
+"i would not\ndo that\nif i were you",
+"reagan would\nnot\nhave done this"
+}
+
+bannons = { "this will\nprotect the\nwhite race",
+"this would be\na triumph\nof reason over emotion",
+"this is what\nsoros\nwants you to do",
+"you are too\nsmart to do \nthis"
+}
 
 approval = flr(rnd(101))
 effectiveness = flr(rnd(101))
@@ -18,24 +50,43 @@ function _draw()
  if (ot != t) then
  	ot = t
  	locale = locales[flr(rnd(#locales)) + 2]
+ 	leader = leaders[flr(rnd(#leaders)) + 1]
+ 	aid = flr(rnd(#actions)) + 1
+ 	action = actions[aid]
+ 	rid1 = 0
+ 	rid2 = 0
+ 	rid3 = 0
+ 	while (rid1 == rid2 or rid1 == rid3 or rid2 == rid3) do
+ 		rid1 = flr(rnd(#responses)) + 1
+ 		rid2 = flr(rnd(#responses)) + 1
+ 		rid3 = flr(rnd(#responses)) + 1
+ 	end
+ 	rids = { rid1, rid2, rid3 }
  	if (locale == nil) then
  		locale = "..somewhere.."
  	end
  	priority = flr(rnd(5)) + 1
  	selected = 0
+ 	av = {}
+ 	for i=1,3 do
+ 		rp = putins[flr(rnd(#putins))+1]
+ 		rb = bannons[flr(rnd(#bannons))+1]
+ 		rr = {rp, rb}
+ 		av[i] = rr
+ 	end
  end
 	print("day "..(t+1), 2, 2, 7)
 	rect(2, 8, 102, 24, 6)
 	print("crisis in ", 5, 11, 8)
 	print(locale, 45, 11)
 	print("priority " .. priority, 5, 17, priority + 1)
-	print("the head of state has issued a", 2, 28, 7)
-	print("formal warning against ˆˆƒ‡", 2, 34)
+	print("their "..leader.." has", 2, 28, 7)
+	print(action, 2, 34)
 	rectfill(2, 50, 70, 138, 15)
 	print("your options", 4, 52, 0)
 	for i=1,3 do
 		print(i, 4, 54 + (18 * (i)), 0) 
-		print("dewit", 12, 54 + (18 * (i)), 5)
+		print(responses[rids[i]], 12, 54 + (18 * (i)), 5)
 		print("’", 62, (54 + (18 * (selected+1))), 3)
 	end
 	print("Ž", 74, 52, 8)
@@ -47,6 +98,33 @@ function _draw()
 	end
 	if (btnp(3)) then
 		selected = (selected + 1) % 3
+	end
+	if (btnp(4)) then
+		ol = selected + 1
+	end
+	if (btnp(5)) then
+		approval += flr(rnd(25)) - 12
+		effectiveness += flr(rnd(25)) - 12
+		profit += flr(rnd(25)) - 12
+		if (approval < 0) then
+			approval = 0
+		end
+		if (effectiveness < 0) then
+			effectiveness = 0
+		end
+		if (profit < 0) then
+			profit = 0
+		end
+		if (approval > 100) then
+			approval = 100
+		end
+		if (effectiveness > 100) then
+			effectiveness = 100
+		end
+		if (profit > 100) then
+			profit = 100
+		end
+		t += 1
 	end
 	rectfill(75, 72, 74 + flr(50*(approval/100)), 76, 11) 
 	rect(74, 71, 125, 77, 5)
@@ -60,6 +138,13 @@ function _draw()
 	if (ol != 0) then
 		rectfill(10, 35, 118, 93, 0)
 		rect(9, 34, 119, 94, 7)
+		print("info about option "..ol, 12, 37, 7)
+		print("putin says... "..av[ol][1], 12, 43, 1)
+		print("bannon says... "..av[ol][2], 12, 63, 3)
+		print("press — to go back", 12, 87, 7)
+		if (btnp(5)) then
+			ol = 0
+		end
 	end
 end
 __gfx__
