@@ -134,28 +134,30 @@ total_score = 0
 function getadvice(lid, aid, rids, priority)
 		av = {}
 	for selected=1,3 do
-		ltruelocale = localet[lid]
-		llocalets = flr(rnd(#ltruelocale)) + 1
-		ltruelocale = ltruelocale[llocalets]
-		ltrueaction = actiont[aid]
-		lactionts = flr(rnd(#ltrueaction)) + 1
-		ltrueaction = ltrueaction[lactionts]
-		lrts = rids[selected]
-		lscore = getrealscore(lid, aid, llocalets, lactionts, lrts, priority) 
-		if (lscore > -100) then
+		truelocale = localet[lid]
+		localets = flr(rnd(#truelocale)) + 1
+		truelocale = truelocale[localets]
+		trueaction = actiont[aid]
+		actionts = flr(rnd(#trueaction)) + 1
+		trueaction = trueaction[actionts]
+		rts = rids[selected]
+		trueresponse = responset[rts]
+		score = getrealscore(lid, aid, localets, actionts, rts, priority) 
+		if (score > 0) then
 			putin_response = putinplus[flr(rnd(#putinplus)) + 1]
 		else
 			putin_response = putinminus[flr(rnd(#putinminus)) + 1]
 		end
-		ltruelocale = localet[lid]
-		llocalets = flr(rnd(#ltruelocale)) + 1
-		ltruelocale = ltruelocale[llocalets]
-		ltrueaction = actiont[aid]
-		lactionts = flr(rnd(#ltrueaction)) + 1
-		ltrueaction = ltrueaction[lactionts]
-		lrts = rids[selected]
-		lscore = getrealscore(lid, aid, llocalets, lactionts, lrts, priority)
-		if (lscore > 0) then
+		truelocale = localet[lid]
+		localets = flr(rnd(#truelocale)) + 1
+		truelocale = truelocale[localets]
+		trueaction = actiont[aid]
+		actionts = flr(rnd(#trueaction)) + 1
+		trueaction = trueaction[actionts]
+		rts = rids[selected]
+		trueresponse = responset[rts]
+		score = getrealscore(lid, aid, localets, actionts, rts, priority)
+		if (score > 0) then
 			bannon_response = bannonplus[flr(rnd(#bannonplus)) + 1]
 		else
 			bannon_response = bannonminus[flr(rnd(#bannonminus)) + 1]
@@ -231,7 +233,7 @@ function _draw()
 		av = getadvice(lid, aid, rids, priority)
  end
 	print("day "..(t+1), 2, 2, 7)
-	rect(2, 8, 106, 24, 6)
+	rect(2, 8, 102, 24, 6)
 	print("crisis in ", 5, 11, 8)
 	print(locale, 45, 11)
 	print("priority " .. priority, 5, 17, priority + 1)
