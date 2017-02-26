@@ -6,7 +6,7 @@ __lua__
 t = 0
 ot = 1
 ol = 0
-stage = 0
+stage = 4
 
 
 locales = { "russia",
@@ -14,14 +14,23 @@ locales = { "russia",
 "canada",
 "israel",
 "europe",
-"the middle east" }
+"the middle east",
+"china",
+"saudi arabia",
+"africa",
+"new york"
+}
 
 localet = { { "russia", "romania", "ukraine" },
 { "iran", "iraq"},
 { "canada", "vermont", "cambodia" },
 { "israel", "iceland", "illinois" },
 { "the uk", "germany", "france", "sweden" },
-{ "syria", "turkey", "china" }
+{ "syria", "turkey", "china" },
+{ "china", "japan", "the phillipines"},
+{ "saudi arabia", "the uae", "jordan", "qatar"},
+{ "south africa", "brazil", "venezuala", "algeria", "morocco"},
+{ "norway", "new york", "the uk"}
 }
 
 localetpts = { { 6, 3, -4 },
@@ -29,7 +38,12 @@ localetpts = { { 6, 3, -4 },
 {7, 10, 2},
 {9, 6, 10},
 {8, 5, 4, -1},
-{-8, -4, -9}}
+{-8, -4, -9},
+{-9, 5, 7},
+{8, 5, -6, 4},
+{4, 3, -3, 1, 6},
+{5, 10, 9}
+}
 
 lp = {true,
 false,
@@ -39,7 +53,16 @@ true,
 false
 }
 
-leaders = { "own trump", "prime minister", "leader", "president", "guy", "religious leader" }
+leaders = { "own trump",
+"prime minister",
+"leader",
+"president",
+"guy",
+"religious leader",
+"premier",
+"king",
+"chancellor"
+}
 
 actions = { "made a major announcement",
 "threatened major action",
@@ -47,16 +70,22 @@ actions = { "made a major announcement",
 "done some kind of thing",
 "won an election",
 "called you on the phone",
-"declared war"
+"declared war",
+"supported your opposition",
+"stopped selling to the us",
+"voted to leave the eu"
 }
 
-actiont = { { "annouced support\nfor\ndonald trump", "condemned the president", "launched an\nembargo on the\nunited states"},
+actiont = { { "annouced support\nfor\ndonald trump", "condemned\nthe president", "launched an\nembargo on the\nunited states"},
 { "threatened to ban\namerican tourists", "warned against\ncontinued\namerican\nintervention" },
 { "resigned", "won an election", "lost a vote\nof no confidence" },
 { "started a charity", "declared\na state of\nemergency", "reached out\nto youths" },
 { "won an election", "passed a major bill", "seen off\na vote\nof no confidence"},
 { "spoken to president\ntrump", "had a private call\nwith the\npresident" },
-{ "declared war on\nthe us", "declared war on\nisis", "declared war\non terror", "declared war on\ndrugs", "declared war\non china" }
+{ "declared war on\nthe us", "declared war on\nisis", "declared war\non terror", "declared war on\ndrugs", "declared war\non china" },
+{ "backed bernie for\n2020", "come out\nin favour of\nfreedom of\nspeech", "emphasized the\nimportance of\ndemocracy", "signed a new\nenvironmental act"},
+{ "announced a\ntrade embargo", "lost more industry", "enacted new safety\nlaws"},
+{ "dropped out of\na trade deal\nwith the us", "abandoned a local\ntrade deal"}
 }
 
 actiontpts = { {7, -7, -10},
@@ -65,7 +94,11 @@ actiontpts = { {7, -7, -10},
 {7, -4, 8},
 {5, 3, 4},
 {6, 2},
-{-10, 8, 5, 3, -2} }
+{-10, 8, 5, 3, -2},
+{-2,8,7,4},
+{-4,-1,3},
+{-4,2}
+}
 
 ap = { true,
 false,
@@ -82,7 +115,10 @@ responses = { "announce\nyour support",
 "declare war",
 "fire nuclear\nweapons",
 "ban their\ncitizens",
-"praise them"
+"praise them",
+"remind\neverybody\nyou won",
+"say it was\nyour idea",
+"talk about\nbrexit"
 }
 
 responset = { "announced his\nsupport",
@@ -91,7 +127,11 @@ responset = { "announced his\nsupport",
 "declared war on\nthem",
 "launched a nuclear\nmissle\non their capital",
 "banned their\ncitizens\nfrom entering\nthe us",
-"praised them" }
+"praised them",
+"reminded the\npress that\nhe won the election",
+"claimed it was his\nidea",
+"insisted he\npredicted brexit"
+}
 
 responsetpts = {4,
 8,
@@ -99,7 +139,10 @@ responsetpts = {4,
 -8,
 -10,
 -7,
-6
+6,
+0,
+1,
+-2
 }
 
 rpts = { true,
@@ -112,18 +155,30 @@ true
 }
 
 putinplus = { "this would be\ngood\nfor russia",
-"yes, keep\nyour\ncitizens confused"
+"yes, keep\nyour\ncitizens confused",
+"you know\nthis is the\nright thing to do",
+"you must do\nthis for me",
+"if you please"
 }
 putinminus = {"i would not\ndo that\nif i were you",
-"reagan would\nnot\nhave done this"
+"reagan would\nnot\nhave done this",
+"i trust your\nintellect",
+"clinton wants you\nto do this",
+"i think you\nknow what\nto do"
 }
 
 bannonplus = { "this will\nprotect the\nwhite race",
-"this would\nbe a triumph\nof reason over emotion"
+"this would\nbe a triumph\nof reason over emotion",
+"you are a\ngenius",
+"everyone\nwill love\nyou",
+"christie\nthinks it's\na good idea"
 }
 
 bannonminus = {"this is what\nsoros\nwants you to do",
-"you are too\nsmart to do \nthis"
+"you are too\nsmart to do \nthis",
+"obama said\nyou should do\nthis",
+"it's your\nchoice",
+"it's a\ndemocrat trick"
 }
 
 approval = 0
@@ -177,31 +232,7 @@ function getrealscore(lid, aid, lts, ats, rts, pri)
 end
 
 function getscore(lid, aid, rid, pri)
-	locationpos = lp[lid]
-	actionpos = ap[aid]
-	responsepos = rpts[rid]
-	if (locationpos and actionpos) then
-		if (responsepos) then
-			return 6-pri
-		end
-		return 6
-	end
-	if (locationpos and not(actionpos)) then
-		if (responsepos) then
-			return 3
-		end
-		return 1
-	end
-	if (not(locationpos) and actionpos) then
-		if (responsepos) then
-			return 2*pri
-		end
-		return 6-pri
-	end
-	if (responsepos) then
-		return 1
-	end
-	return 5
+	return flr(rnd(10))
 end 
 
 function _draw()
@@ -336,8 +367,9 @@ function _draw()
 		else
 			print("we say\nthis is very bad", 34, 96, 8)
 		end
+		print("press Ž...", 34, 120, 5)
 		if (btnp(4)) then
-			if (t < 37) then
+			if (t < 30) then
 			stage = 0
 			else
 			stage = 2
@@ -345,9 +377,26 @@ function _draw()
 		end
 	end
 	if (stage == 2) then
-		print("you have completed\n37 days in office", 4, 20, 7)
+		rectfill(2, 42, 126, 80, 7)
+		print("you have completed", 4, 20, 7)
+		print("30 days in office", 4, 26, 11)
 		print("your total presidentscore is...", 4, 32, 7)
-		print(total_score, 4, 38, 7)
+		print("ronald reagan...\t36\ngeorge h. w. bush...\t20\nbill clinton...\t45\ngeorge bush...\t15\nbarack obama...\t53", 4, 44, 0)
+		print("you...\t"..total_score, 4, 74, 13)
+		print("congratulations on making it\n2% of the way through\nyour presidency", 4, 84, 7)
+		print("time for a trip to mar-a-lago?", 4, 102, 3)
+	end
+	if (stage == 4) then
+		print("i'm so sorry but...", 4, 20, 7)
+		print("you are donald trump.", 4, 26, 8)
+		print("can you make it through the\nfirst 30 days\nwith only your limited\nintellect and your\nwondeful advisors,", 4, 38, 7)
+		print("vladimir putin", 4, 68, 1)
+		print(" and ", 60, 68, 7)
+		print("steve bannon", 80, 68, 3)
+		print("press Ž (z) to find out!", 4, 80, 7)
+		if (btnp(4)) then
+			stage = 0
+		end
 	end
 end
 __gfx__
